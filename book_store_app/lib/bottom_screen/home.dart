@@ -9,13 +9,13 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final List<String> categories = [
-    'New',
+    'NewSS',
     'Best Sellers',
     'Novels',
     'Science',
     'Romance',
-    'Horror',
-    'History',
+    'HorrorS',
+    'HistoryS',
     'Anime',
     'Children',
   ];
