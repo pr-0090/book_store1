@@ -10,6 +10,6 @@ class BasketScreen extends StatefulWidget {
 class _BasketScreenState extends State<BasketScreen> {
   @override
   Widget build(BuildContext context) {
-    return const Center(child: Text('Baskets'));
+    return const Center(child: Text('Basket'));
   }
 }
