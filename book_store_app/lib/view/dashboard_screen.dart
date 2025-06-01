@@ -38,7 +38,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ),
       ),
       child: Scaffold(
-        appBar: AppBar(title: const Text('📚 Book Store')),
+        appBar: AppBar(title: const Text('📚 Book Stores')),
         body: Container(
           decoration: const BoxDecoration(
             gradient: LinearGradient(
