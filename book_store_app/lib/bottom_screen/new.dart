@@ -10,6 +10,6 @@ class NewScreen extends StatefulWidget {
 class _NewScreen extends State<NewScreen> {
   @override
   Widget build(BuildContext context) {
-    return const Center(child: Text('News'));
+    return const Center(child: Text('New'));
   }
 }
