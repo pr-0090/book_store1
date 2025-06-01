@@ -116,7 +116,7 @@ class LoginScreen extends StatelessWidget {
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
-                                  content: Text('Invalid username or password'),
+                                  content: Text('Invali username or password'),
                                   backgroundColor: Colors.redAccent,
                                 ),
                               );
