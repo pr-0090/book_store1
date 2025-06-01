@@ -78,7 +78,7 @@ class SignupScreen extends StatelessWidget {
                       TextField(
                         controller: nameController,
                         decoration: InputDecoration(
-                          labelText: 'Name',
+                          labelText: 'Names',
                           prefixIcon: const Icon(Icons.person),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
