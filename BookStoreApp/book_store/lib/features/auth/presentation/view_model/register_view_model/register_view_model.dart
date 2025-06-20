@@ -27,7 +27,7 @@ class RegisterViewModel extends Bloc<RegisterEvent, RegisterState> {
       ),
     );
 
-    print("Register usecase result: $result"); // DEBUG
+    print("Register usecase result: $result");
 
     result.fold(
       (failure) {

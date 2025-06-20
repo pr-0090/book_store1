@@ -14,7 +14,7 @@ class UserLocalDatasource implements IUserDataSource {
     try {
       final user = await _hiveService.loginUser(email, password);
       if (user == null) {
-        throw Exception("Invalid email or password");
+        throw Exception("Invalid email address or password");
       }
       return user.userId ?? '';
     } catch (e) {

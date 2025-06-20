@@ -89,7 +89,7 @@ class SignUpView extends StatelessWidget {
                                 controller: _emailController,
                                 style: const TextStyle(color: Colors.white),
                                 decoration: _inputDecoration(
-                                  'Email Address',
+                                  'Email ',
                                   Icons.email,
                                 ),
                                 validator: (value) => value!.isEmpty
