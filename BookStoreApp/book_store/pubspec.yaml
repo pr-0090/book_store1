@@ -57,6 +57,7 @@ dependencies:
   flutter_bloc: ^9.1.1
   injector: ^4.0.0
   build_runner: ^2.5.3
+  flutter_launcher_icons: ^0.14.4
 
 
 
@@ -90,6 +91,11 @@ flutter:
     - assets/images/splash_image.png
     - assets/images/facebook.png
     - assets/images/google.png
+    - assets/images/harry.png
+    - assets/images/fairy.png
+    - assets/icon/logo.png
+    
+    
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
@@ -117,3 +123,10 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: "AppIcon"
+  image_path: "assets/icon/logo.png"
+  min_sdk_android: 21
+  remove_alpha_ios: true
+  

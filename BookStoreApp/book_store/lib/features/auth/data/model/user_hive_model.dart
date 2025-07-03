@@ -3,7 +3,6 @@ import 'package:book_store/features/auth/domain/entity/user_entity.dart';
 import 'package:equatable/equatable.dart';
 import 'package:hive/hive.dart';
 import 'package:uuid/uuid.dart';
-
 part 'user_hive_model.g.dart';
 
 @HiveType(typeId: HiveTableConstant.userTableId)
@@ -35,7 +34,7 @@ class UserHiveModel extends Equatable {
   factory UserHiveModel.fromEntity(UserEntity user) {
     return UserHiveModel(
       userId: user.userId,
-      name: user.name,
+      name: user.username,
       email: user.email,
       password: user.password,
     );
@@ -45,7 +44,7 @@ class UserHiveModel extends Equatable {
   UserEntity toEntity() {
     return UserEntity(
       userId: userId,
-      name: name,
+      username: name,
       email: email,
       password: password,
     );

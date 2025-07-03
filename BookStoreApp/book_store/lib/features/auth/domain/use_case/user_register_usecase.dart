@@ -30,14 +30,22 @@ class RegisterUserUseCase
     : _userRepository = userRepository;
 
   @override
-  Future<Either<Failure, void>> call(RegisterUserParams params) {
+  Future<Either<Failure, void>> call(RegisterUserParams params) async {
     final user = UserEntity(
-      name: params.name,
+      username: params.name,
       email: params.email,
       password: params.password,
     );
     debugPrint("RegisterUserUseCase called with: $user");
 
-    return _userRepository.registerUser(user);
+    try {
+      await _userRepository.registerUser(user);
+      return Right(null);
+    } catch (e) {
+      final cleanedMessage = e.toString().replaceAll('Exception: ', '');
+      return Left(
+        ApiFailure(message: 'Failed to register user: $cleanedMessage'),
+      );
+    }
   }
 }

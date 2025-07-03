@@ -21,27 +21,26 @@ class RegisterViewModel extends Bloc<RegisterEvent, RegisterState> {
 
     final result = await _registerUsecase(
       RegisterUserParams(
-        name: event.name,
+        name: event.username, // include this if your use case requires it
         email: event.email,
         password: event.password,
       ),
     );
-
-    print("Register usecase result: $result");
+    // print("Register usecase result: $result"); // DEBUG
 
     result.fold(
       (failure) {
         emit(state.copyWith(isLoading: false, isSuccess: false));
         showMySnackBar(
           context: event.context,
-          message: "Failed to register user: ${failure.message}",
+          message: "Failed to register user : ${failure.message}",
         );
       },
       (success) {
         emit(state.copyWith(isLoading: false, isSuccess: true));
         showMySnackBar(
           context: event.context,
-          message: "User successfully registered",
+          message: "User Successfully register",
         );
       },
     );

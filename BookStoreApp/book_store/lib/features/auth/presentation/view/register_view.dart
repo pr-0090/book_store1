@@ -177,7 +177,8 @@ class SignUpView extends StatelessWidget {
                                                 .read<RegisterViewModel>()
                                                 .add(
                                                   RegisterUserEvent(
-                                                    name: _nameController.text
+                                                    username: _nameController
+                                                        .text
                                                         .trim(),
                                                     email: _emailController.text
                                                         .trim(),
