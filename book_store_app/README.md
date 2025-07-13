@@ -1,4 +1,4 @@
-# book_store_app
+# book_store
 
 A new Flutter project.
 
