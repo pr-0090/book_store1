@@ -15,4 +15,5 @@ class ApiEndpoints {
 
   //Books
   static const String getAllBooks = "admin/books/";
+  static const String createBooking = "bookings/";
 }
