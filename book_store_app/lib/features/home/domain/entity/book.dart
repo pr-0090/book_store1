@@ -10,6 +10,8 @@ class BookEntity extends Equatable {
   final double price;
   final String coverImage;
   final String? description;
+  final int pageCount; // ✅ New field
+  final double weightGrams; // ✅ New field
 
   const BookEntity({
     this.id,
@@ -21,6 +23,8 @@ class BookEntity extends Equatable {
     required this.price,
     required this.coverImage,
     this.description,
+    required this.pageCount, // ✅ Add to constructor
+    required this.weightGrams, // ✅ Add to constructor
   });
 
   @override
@@ -34,5 +38,7 @@ class BookEntity extends Equatable {
     price,
     coverImage,
     description,
+    pageCount,
+    weightGrams,
   ];
 }

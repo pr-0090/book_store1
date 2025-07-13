@@ -1,4 +1,7 @@
 import 'package:book_store/features/home/domain/entity/book.dart';
+import 'package:book_store/features/home/domain/use_case/create_booking_usecase.dart';
+import 'package:book_store/features/home/presentation/view/booking_view.dart';
+import 'package:book_store/features/home/presentation/view_model/Booking/booking_view_model.dart';
 import 'package:book_store/features/home/presentation/view_model/book_state.dart';
 import 'package:book_store/features/home/presentation/view_model/book_view_model.dart';
 import 'package:flutter/material.dart';
@@ -109,20 +112,22 @@ class HomeView extends StatelessWidget {
                             _buildFilterChip("All", selected: true),
                             _buildFilterChip("Fiction"),
                             _buildFilterChip("Non-Fiction"),
-                            _buildFilterChip("Romance"),
+                            _buildFilterChip("Fantasy"),
+                            _buildFilterChip("Science"),
                           ],
                         ),
                       ),
                       const SizedBox(height: 14),
 
-                      // Book cards dynamically
-                      ...books.map((book) => _buildBookCard(book)),
+                      // Book cards built dynamically
+                      ...books.map((book) => _buildBookCard(context, book)),
                     ],
                   ),
                 );
               } else if (state is BookError) {
                 return Center(child: Text(state.message));
               } else {
+                // Initial or unknown state
                 return const SizedBox.shrink();
               }
             },
@@ -147,154 +152,146 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  Widget _buildBookCard(BookEntity book) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final screenWidth = MediaQuery.of(context).size.width;
-        final isTablet = screenWidth > 600;
+  Widget _buildBookCard(BuildContext context, BookEntity book) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isTablet = screenWidth > 600;
 
-        return Container(
-          padding: const EdgeInsets.all(11),
-          margin: const EdgeInsets.only(bottom: 12),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(19),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withAlpha((0.08 * 255).round()),
-                blurRadius: 10,
-                spreadRadius: 1,
-                offset: const Offset(0, 4),
-              ),
-            ],
+    return Container(
+      padding: const EdgeInsets.all(11),
+      margin: const EdgeInsets.only(bottom: 12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(19),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withAlpha((0.08 * 255).round()),
+            blurRadius: 10,
+            spreadRadius: 1,
+            offset: const Offset(0, 4),
           ),
-          child: Column(
+        ],
+      ),
+      child: Column(
+        children: [
+          // Title and Favorite icon
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              // Title and Favorite icon
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        book.title,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 14,
-                        ),
+              Flexible(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      book.title,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14,
                       ),
-                      Text(
-                        book.author,
-                        style: const TextStyle(
-                          color: Colors.grey,
-                          fontSize: 11.5,
-                        ),
+                    ),
+                    Text(
+                      book.author,
+                      style: const TextStyle(
+                        color: Colors.grey,
+                        fontSize: 11.5,
                       ),
-                    ],
-                  ),
-                  const Icon(Icons.favorite_border, size: 18),
-                ],
-              ),
-              const SizedBox(height: 8),
-
-              // Book Cover
-              Center(
-                child: Image.network(
-                  'http://192.168.101.3:5000/uploads/${book.coverImage}',
-                  height: isTablet ? 160 : 120,
-                  width: isTablet ? 260 : null,
-                  fit: BoxFit.contain,
-                  errorBuilder: (context, error, stackTrace) =>
-                      const Icon(Icons.broken_image),
-                  loadingBuilder: (context, child, loadingProgress) {
-                    if (loadingProgress == null) return child;
-                    return const SizedBox(
-                      height: 100,
-                      child: Center(child: CircularProgressIndicator()),
-                    );
-                  },
+                    ),
+                  ],
                 ),
               ),
-              const SizedBox(height: 10),
+              const Icon(Icons.favorite_border, size: 18),
+            ],
+          ),
+          const SizedBox(height: 8),
 
-              // Book Specs
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: IconText(
-                      icon: FontAwesomeIcons.bookOpen,
-                      text: book.genre,
-                    ),
-                  ),
-                  Expanded(
-                    child: IconText(
-                      icon: FontAwesomeIcons.building,
-                      text: book.publisher,
-                    ),
-                  ),
-                  Expanded(
-                    child: IconText(
-                      icon: FontAwesomeIcons.calendar,
-                      text: "${book.publicationYear}",
-                    ),
-                  ),
-                ],
+          // Image
+          Center(
+            child: Image.network(
+              'http://192.168.157.46:5000/uploads/${book.coverImage}',
+              height: isTablet ? 160 : 120,
+              width: isTablet ? 260 : null,
+              fit: BoxFit.contain,
+              errorBuilder: (context, error, stackTrace) =>
+                  const Icon(Icons.broken_image),
+              loadingBuilder: (context, child, loadingProgress) {
+                if (loadingProgress == null) return child;
+                return const SizedBox(
+                  height: 100,
+                  child: Center(child: CircularProgressIndicator()),
+                );
+              },
+            ),
+          ),
+          const SizedBox(height: 10),
+
+          // Specs row
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: IconText(
+                  icon: FontAwesomeIcons.book,
+                  text: "${book.pageCount} pages",
+                ),
               ),
-              const SizedBox(height: 10),
-
-              // Price and Buy button
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  RichText(
-                    text: TextSpan(
-                      children: [
-                        TextSpan(
-                          text: "Npr ${book.price.toStringAsFixed(0)} /- ",
-                          style: const TextStyle(
-                            color: Colors.black,
-                            fontSize: 20,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        const TextSpan(
-                          text: "Per book",
-                          style: TextStyle(color: Colors.grey, fontSize: 15),
-                        ),
-                      ],
-                    ),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      // TODO: implement buy now functionality
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blueAccent,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 10,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(14),
-                      ),
-                    ),
-                    child: const Text(
-                      "Buy Now",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                ],
+              Expanded(
+                child: IconText(
+                  icon: FontAwesomeIcons.weightHanging,
+                  text: "${book.weightGrams} g",
+                ),
+              ),
+              Expanded(
+                child: IconText(
+                  icon: FontAwesomeIcons.tag,
+                  text: "Npr ${book.price.toStringAsFixed(2)}",
+                ),
               ),
             ],
           ),
-        );
-      },
+          const SizedBox(height: 10),
+
+          // Price and Book button
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              RichText(
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                      text: "Npr ${book.price.toStringAsFixed(0)} /- ",
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const TextSpan(
+                      text: "Per book",
+                      style: TextStyle(color: Colors.grey, fontSize: 15),
+                    ),
+                  ],
+                ),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => BlocProvider(
+                        create: (context) => BookingBloc(
+                          createBookingUsecase: context
+                              .read<CreateBookingUsecase>(),
+                        ),
+                        child: BookingScreen(book: book),
+                      ),
+                    ),
+                  );
+                },
+                child: const Text("Buy Now"),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

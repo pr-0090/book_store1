@@ -12,7 +12,9 @@ import 'package:book_store/features/auth/presentation/view_model/register_view_m
 import 'package:book_store/features/home/data/data_source/remote_data_source/book_remote_data_source.dart';
 import 'package:book_store/features/home/data/repository/remote_repository/remote_repository.dart';
 import 'package:book_store/features/home/domain/repository/book_repository.dart';
+import 'package:book_store/features/home/domain/use_case/create_booking_usecase.dart';
 import 'package:book_store/features/home/domain/use_case/get_all_books_usecase.dart';
+import 'package:book_store/features/home/presentation/view_model/Booking/booking_view_model.dart';
 import 'package:book_store/features/home/presentation/view_model/book_view_model.dart';
 import 'package:book_store/features/splash/presentation/view_model/splash_view_model.dart';
 import 'package:dio/dio.dart';
@@ -27,10 +29,26 @@ Future<void> setupLocator() async {
   await _initSharedPrefs();
   await _initSplashModule();
   await _initBookModule();
+  await _initBookingModule();
 }
 
 Future<void> _initHiveService() async {
   serviceLocator.registerLazySingleton<HiveService>(() => HiveService());
+}
+
+Future<void> _initBookingModule() async {
+  serviceLocator.registerLazySingleton<CreateBookingUsecase>(
+    () => CreateBookingUsecase(
+      repository: serviceLocator<IBookRepository>(), // reuse existing repo
+      tokenSharedPrefs: serviceLocator<TokenSharedPrefs>(),
+    ),
+  );
+
+  serviceLocator.registerFactory<BookingBloc>(
+    () => BookingBloc(
+      createBookingUsecase: serviceLocator<CreateBookingUsecase>(),
+    ),
+  );
 }
 
 Future<void> _initBookModule() async {

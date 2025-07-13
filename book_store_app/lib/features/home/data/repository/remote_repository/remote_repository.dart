@@ -1,13 +1,14 @@
-import 'package:book_store/core/error/failure.dart';
-import 'package:book_store/features/home/data/data_source/remote_data_source/book_remote_data_source.dart';
-import 'package:book_store/features/home/domain/entity/book.dart';
+import 'package:book_store/features/home/data/data_source/book_datasource.dart';
 import 'package:book_store/features/home/domain/repository/book_repository.dart';
 import 'package:dartz/dartz.dart';
+import 'package:book_store/core/error/failure.dart';
+
+import 'package:book_store/features/home/domain/entity/book.dart';
 
 class BookRemoteRepository implements IBookRepository {
-  final BookRemoteDatasource _remoteDatasource;
+  final IBookDatasource _remoteDatasource;
 
-  BookRemoteRepository({required BookRemoteDatasource remoteDatasource})
+  BookRemoteRepository({required IBookDatasource remoteDatasource})
     : _remoteDatasource = remoteDatasource;
 
   @override
@@ -18,6 +19,32 @@ class BookRemoteRepository implements IBookRepository {
     } catch (e) {
       return Left(
         ApiFailure(message: "Failed to fetch books: ${e.toString()}"),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> createBooking(
+    String? token,
+    String bookId, {
+    required int quantity,
+    required String buyerName,
+    required String shippingAddress,
+    required double totalPrice,
+  }) async {
+    try {
+      await _remoteDatasource.createBooking(
+        token,
+        bookId,
+        quantity: quantity,
+        buyerName: buyerName,
+        shippingAddress: shippingAddress,
+        totalPrice: totalPrice,
+      );
+      return const Right(null);
+    } catch (e) {
+      return Left(
+        ApiFailure(message: "Failed to create purchase: ${e.toString()}"),
       );
     }
   }
